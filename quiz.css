@@ -1,0 +1,103 @@
+
+
+#alternatives button {
+	width: 300px;
+	display: block;
+	margin: auto;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+#select {
+	text-align: center;
+	/*border: 20px solid rgb(55, 74, 50);*/
+	border-radius: 20px;
+	padding: 20px;
+	max-width: 200px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 20px;
+	background-color: rgb(110, 147, 99);
+}
+
+#mainDiv {
+	/*border: 5px solid rgb(55, 74, 50);*/
+	/*border-radius: 10px;*/
+	border-radius: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 0px;
+	max-width: 700px;
+	padding-top: 2px;
+	padding: 20px;
+	text-align: center;
+	background-color: rgb(110, 147, 99);
+	/*background-color: rgb(243, 226, 133);*/
+}
+
+#bigDiv {
+	background-color: rgb(147, 168, 141);
+	border-radius: 20px;
+	padding: 20px;
+	padding-top: 1px;
+	max-width: 720px;
+	margin: auto;
+	margin-top: 20px;
+}
+
+#div1 {
+	border-radius: 20px;
+	background-color: rgb(181, 194, 177);
+	max-width: 740px;
+	padding: 20px;
+	padding-top: 2px;
+	margin: auto;
+	margin-top: 50px;
+}
+
+#questionDiv {
+	border: 5px solid rgb(55, 74, 50);
+	/*border-radius: 10px;*/
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 700px;
+	padding: 20px;
+	text-align: center;
+	background-color: rgb(110, 147, 99);
+}
+
+.selects {
+	/*display: block;*/
+	font-size: 35px;
+	margin: 20px;*/
+	border: 2px solid grey;
+	border-radius: 5px;
+	/*max-width: auto;
+	text-align: center;*/*/
+}
+
+select {
+	/*border: 2px solid grey;*/
+	border-radius: 5px;
+	/*background-color: rgb(181, 194, 177);*/
+}
+
+label {
+	/*border: 2px solid blue;*/
+	display: block;
+}
+
+button {
+
+	margin-top: 20px;
+	/*border: 2px solid grey;*/
+	border-radius: 10px;
+	background: white;
+	padding: 10px;
+	margin-bottom: 15px;
+	/*background-color: rgb(181, 194, 177);*/
+}
+
+p {
+	font-size: 25px;
+}
