@@ -44,13 +44,9 @@ function checkAnswer(){
 	loadSelectScreen();
 }
 
-function parseAnswers(questions){
-	for (let i=0; i<questions.length; i++){
-		correctAnswers.push(questions[i].correct_answer);
-	}
-}
 
-function showResults(){
+
+function displayResults(){
 
 }
 
@@ -82,6 +78,7 @@ function loadQuestion(){
 	}
 	else{
 		checkAnswer();
+		displayResults();
 	}
 }
 
@@ -90,10 +87,39 @@ function loadQuestion(){
 
 function loadSelectScreen(){
 	mainDiv.innerHTML = "";
-	createCategorySelect(mainDiv);
-	createDifficultySelect(mainDiv);
-	createAmountSelect(mainDiv);
+	createDropDownSelect("Category", "category", categoryAlt);
+	createDropDownSelect("Difficulty", "difficulty", difficultyAlt);
+	createDropDownSelect("Number of Questions", "amount", amountAlt);
 	createSubmitButton(mainDiv);
+}
+
+function createDropDownSelect(title, name, subjectList){
+	let div = document.createElement("div");
+	div.setAttribute("class", "selects");
+	
+	let label = document.createElement("label");
+	label.innerHTML = title;
+	div.appendChild(label);
+	let select = document.createElement("select");
+	select.setAttribute("name", name);
+
+	let currentItem;
+	let option;
+	for (let i=0; i<subjectList.length; i++){
+		currentItem = subjectList[i];
+		option = document.createElement("option");
+		if(currentItem.name !== undefined){
+			option.setAttribute("value", currentItem.value);
+			option.innerHTML = currentItem.name;
+		}
+		else{
+			option.setAttribute("value", currentItem.toLowerCase());
+			option.innerHTML = currentItem.toLowerCase();
+		}
+		select.appendChild(option);
+	}
+	div.appendChild(select);
+	mainDiv.appendChild(div);
 }
 
 function createSubmitButton(htmlElement){
@@ -118,93 +144,6 @@ function createSubmitButton(htmlElement){
 		console.log(url);
 		request(url);
 		});
-}
-
-function createCategorySelect(htmlElement){
-
-	let div = document.createElement("div");
-	div.setAttribute("class", "selects");
-
-	var labelCategory = document.createElement("label");
-	labelCategory.innerHTML = "Category";
-	div.appendChild(labelCategory);
-
-	var selectCategory = document.createElement("select");
-	selectCategory.setAttribute("name", "category");
-
-
-	var option0 = document.createElement("option");
-	option0.setAttribute("value", "10");
-	option0.innerHTML = "Books"
-	selectCategory.appendChild(option0);
-
-	var option1 = document	.createElement("option");
-	option1.setAttribute("value", "11");
-	option1.innerHTML = "Film";
-	selectCategory.appendChild(option1);
-
-	div.appendChild(selectCategory);
-
-	htmlElement.appendChild(div);
-}
-
-function createDifficultySelect(htmlElement){
-
-	let div = document.createElement("div");
-	div.setAttribute("class", "selects");
-
-	var labelDifficulty = document.createElement("label");
-	labelDifficulty.innerHTML = "Difficulty";
-	div.appendChild(labelDifficulty);
-	
-	var selectDifficulty = document.createElement("select");
-	selectDifficulty.setAttribute("name", "difficulty");
-
-	var option0 = document.createElement("option");
-	option0.setAttribute("value", "easy");
-	option0.innerHTML = "Easy";
-	selectDifficulty.appendChild(option0);
-	
-	var option1 = document.createElement("option");
-	option1.setAttribute("value", "medium");
-	option1.innerHTML = "Medium";
-	selectDifficulty.appendChild(option1);
-
-	var option2 = document.createElement("option");
-	option2.setAttribute("value", "hard");
-	option2.innerHTML = "Hard";
-	selectDifficulty.appendChild(option2);
-
-	div.appendChild(selectDifficulty);
-
-	htmlElement.appendChild(div);
-}
-
-function createAmountSelect(htmlElement){
-	let div = document.createElement("div");
-	div.setAttribute("class", "selects");
-
-	var labelAmount = document.createElement("label");
-	labelAmount.innerHTML = "Number of Questions";
-	div.appendChild(labelAmount);
-	
-	var selectAmount = document.createElement("select");
-	selectAmount.setAttribute("name", "amount")
-
-
-	var option0 = document.createElement("option");
-	option0.setAttribute("value", "5");
-	option0.innerHTML = "5";
-	selectAmount.appendChild(option0);
-
-	var option1 = document.createElement("option");
-	option1.setAttribute("value", "10");
-	option1.innerHTML = "10";
-	selectAmount.appendChild(option1);
-
-	div.appendChild(selectAmount);
-
-	htmlElement.appendChild(div);
 }
 
 //---------------------------LOADING QUESTION-----------------------------------
@@ -252,3 +191,22 @@ function createQuestionScreen(question){
 		});
 	}
 }
+
+//------------------Helper Functions------------------------------
+//----------------------------------------------------------------
+
+function parseAnswers(questions){
+	for (let i=0; i<questions.length; i++){
+		correctAnswers.push(questions[i].correct_answer);
+	}
+}
+
+//---------------------API Info----------------------------------
+//---------------------------------------------------------------
+
+let difficultyAlt = ["Easy", "Medium", "Hard"];
+let amountAlt = ["5", "10", "15"];
+let categoryAlt = [{"name": "Any", "value": 0}, 
+				   {"name": "Film", "value": 11},
+				   {"name": "Books", "value": 10}
+			      ];

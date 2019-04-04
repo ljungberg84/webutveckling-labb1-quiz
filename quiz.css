@@ -1,4 +1,7 @@
 
+body {
+	font-family: "crimson Text";
+}
 
 #alternatives button {
 	width: 300px;
@@ -79,6 +82,8 @@
 select {
 	/*border: 2px solid grey;*/
 	border-radius: 5px;
+	padding: 5px;
+	min-width: 80px;
 	/*background-color: rgb(181, 194, 177);*/
 }
 
@@ -100,4 +105,11 @@ button {
 
 p {
 	font-size: 25px;
+}
+
+hr {
+	border-top: 1px dotted black;
+	border-bottom: 1px dotted black;
+	padding: 0;
+	max-width: 500px;
 }
