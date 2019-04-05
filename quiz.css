@@ -59,14 +59,15 @@ body {
 }
 
 #questionDiv {
-	border: 5px solid rgb(55, 74, 50);
-	/*border-radius: 10px;*/
+	//border: 5px solid rgb(55, 74, 50);
+	border-radius: 15px;*/
 	margin-left: auto;
 	margin-right: auto;
+	margin-bottom: 20px;
 	max-width: 700px;
-	padding: 20px;
+	padding: 5px;
 	text-align: center;
-	background-color: rgb(110, 147, 99);
+	background-color: rgb(181, 194, 177);
 }
 
 .selects {
@@ -77,6 +78,10 @@ body {
 	border-radius: 5px;
 	/*max-width: auto;
 	text-align: center;*/*/
+}
+
+#questionHeader {
+	font-size: 35px;
 }
 
 select {

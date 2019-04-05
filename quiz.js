@@ -1,23 +1,24 @@
 
 const xhttp = new XMLHttpRequest();
-let questions = [];
+//let questions = [];
 let playerAnswers = [];
-let correctAnswers = [];
-let questionCount = 0;//use shift instead?
+//let correctAnswers = [];
+//let questionCount = 0;
 let mainDiv = document.querySelector("#mainDiv");
 
 window.onload = loadSelectScreen;
 
-xhttp.onreadystatechange = () =>{
+xhttp.onreadystatechange = function() {
 	console.log(xhttp.readyState);
 	if (xhttp.readyState === 4){
 		if (xhttp.status === 200){
 			console.log("200");
-			questions = JSON.parse(xhttp.responseText).results;
-			//let questions = JSON.parse(xhttp.responseText).results;
-			parseAnswers(questions);
-			startGame(questions);
+			let questions = JSON.parse(this.responseText).results;
 
+
+			//let questions = JSON.parse(xhttp.responseText).results;
+			//parseAnswers(questions);
+			startGame(questions);
 			console.log(questions);
 		}
 		if (xhttp.status === 404){
@@ -26,61 +27,64 @@ xhttp.onreadystatechange = () =>{
 	}
 };
 
+
 function request(url){
 	xhttp.open("get", url, true);
 	xhttp.send();
 }
 
-function checkAnswer(){
+function checkAnswer(questions){
 	let sum = 0;
-	for (let i=0; i<correctAnswers.length; i++){
-		if(playerAnswers[i].localeCompare(correctAnswers[i]) === 0){
+	for (let i=0; i<questions.correctAnswers.length; i++){
+		if(playerAnswers[i].localeCompare(questions.correctAnswers[i]) === 0){
 			sum += 1;
 		}
 	}
 	console.log("correct answers: " + sum);
 	console.log("player: " + playerAnswers);
-	console.log("correct: " + correctAnswers);
+	console.log("correct: " + questions.correctAnswers);
 	loadSelectScreen();
 }
-
 
 
 function displayResults(){
 
 }
 
-function shuffle(array){
-	array.sort(() => Math.random() - 0.5);
-}
-
-function randomizeAlternatives(question){
-	let alternatives = [...question.incorrect_answers];
-	alternatives.push(question.correct_answer);
-	shuffle(alternatives);
-	question.randomizedAlternatives = alternatives;
-}
 
 function startGame(questions){
-	playerAnswers = [];
-	correctAnswers = [];
-	questionCount = 0;
-	parseAnswers(questions);
-	loadQuestion(questions);
+	//questions.playerAnswers = [];
+	questions.correctAnswers = parseAnswers(questions);
+	questions.count = 0;
+	questions.getQuestion = function() {
+		if(this.length > 0){
+			let question = questions.shift();
+			randomizeAlternatives(question);
+			return question;
+		}
+		return null;
+	};
+	// playerAnswers = [];
+	// correctAnswers = [];
+	// questionCount = 0;
+	//parseAnswers(questions);
+	//loadQuestion(questions, questions.count);
+	nextQuestion(questions);
 }
 
-function loadQuestion(){
+
+function nextQuestion(questions){
 	if (questions.length > 0){
-		let currentQuestion = questions.shift();
-		questionCount += 1;
-		randomizeAlternatives(currentQuestion);
-		createQuestionScreen(currentQuestion);
+		questions.count += 1;
+		//randomizeAlternatives(currentQuestion);
+		createQuestionScreen(questions);
 	}
 	else{
-		checkAnswer();
+		checkAnswer(questions);
 		displayResults();
 	}
 }
+
 
 //-----------------LOAD SELECTSCREEN----------------------------------
 //--------------------------------------------------------------------
@@ -88,10 +92,11 @@ function loadQuestion(){
 function loadSelectScreen(){
 	mainDiv.innerHTML = "";
 	createDropDownSelect("Category", "category", categoryAlt);
-	createDropDownSelect("Difficulty", "difficulty", difficultyAlt);
+	createDropDownSelect("Difficulty", "difficulty", difficultyAlternatives);
 	createDropDownSelect("Number of Questions", "amount", amountAlt);
 	createSubmitButton(mainDiv);
 }
+
 
 function createDropDownSelect(title, name, subjectList){
 	let div = document.createElement("div");
@@ -122,6 +127,7 @@ function createDropDownSelect(title, name, subjectList){
 	mainDiv.appendChild(div);
 }
 
+
 function createSubmitButton(htmlElement){
 	let button = document.createElement("button");
 	button.innerHTML = "Start Quiz";
@@ -146,27 +152,39 @@ function createSubmitButton(htmlElement){
 		});
 }
 
-//---------------------------LOADING QUESTION-----------------------------------
-//------------------------------------------------------------------------------
 
-function createQuestionScreen(question){
+//---------------------------LOAD QUESTION-----------------------------------
+//---------------------------------------------------------------------------
+
+function createQuestionScreen(questions){
+
+	let newQuestion = questions.getQuestion();
+
+	let mainDiv = document.querySelector("#mainDiv");
 	mainDiv.innerHTML = "";
 
-	let questionHeader = document.createElement("h1");
-	questionHeader.innerHTML = "Question nr " + questionCount + ":";
-	mainDiv.appendChild(questionHeader);
+	//------------------------
+	let div = document.createElement("div");
+	div.setAttribute("id", "questionDiv");
+	//------------------------
+
+	let questionHeader = document.createElement("p");
+	questionHeader.setAttribute("id", "questionHeader");
+	questionHeader.innerHTML = "Question nr " + questions.count + ":";
+	div.appendChild(questionHeader);
 
 	let questionP = document.createElement("p");
-	questionP.innerHTML = question.question;
-	mainDiv.appendChild(questionP);
+	questionP.innerHTML = newQuestion.question;
+	div.appendChild(questionP);
+	mainDiv.appendChild(div);
 
 	let alternatives = document.createElement("div");
 	alternatives.setAttribute("id", "alternatives");
 
 	let button;
 	let text;
-	for (var i=0; i<question.randomizedAlternatives.length; i++){
-		text = question.randomizedAlternatives[i];
+	for (var i=0; i<newQuestion.randomizedAlternatives.length; i++){
+		text = newQuestion.randomizedAlternatives[i];
 		button = document.createElement("button");
 		button.setAttribute("class", "answerButton");
 		button.setAttribute("value", text);
@@ -178,33 +196,52 @@ function createQuestionScreen(question){
 	let cancelButton = document.createElement("button");
 	cancelButton.innerHTML = "Cancel";
 	mainDiv.appendChild(cancelButton);
+	
 	cancelButton.addEventListener("click", function(){
 		loadSelectScreen();
 	});
 
 	let answerButtons = document.getElementsByClassName("answerButton");
 	for (let i=0; i<answerButtons.length; i++){
+		
 		answerButtons[i].addEventListener("click", function(){
 			console.log(this.value);
 			playerAnswers.push(this.value);
-			loadQuestion();
+			nextQuestion(questions);
 		});
 	}
 }
+
 
 //------------------Helper Functions------------------------------
 //----------------------------------------------------------------
 
 function parseAnswers(questions){
+	let tempArray = [];
 	for (let i=0; i<questions.length; i++){
-		correctAnswers.push(questions[i].correct_answer);
+		tempArray.push(questions[i].correct_answer);
 	}
+	return tempArray;
 }
+
+
+function shuffle(array){
+	array.sort(() => Math.random() - 0.5);
+}
+
+
+function randomizeAlternatives(question){
+	let alternatives = [...question.incorrect_answers];
+	alternatives.push(question.correct_answer);
+	shuffle(alternatives);
+	question.randomizedAlternatives = alternatives;
+}
+
 
 //---------------------API Info----------------------------------
 //---------------------------------------------------------------
 
-let difficultyAlt = ["Easy", "Medium", "Hard"];
+let difficultyAlternatives = ["Easy", "Medium", "Hard"];
 let amountAlt = ["5", "10", "15"];
 let categoryAlt = [{"name": "Any", "value": 0}, 
 				   {"name": "Film", "value": 11},
