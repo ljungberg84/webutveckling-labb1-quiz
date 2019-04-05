@@ -1,42 +1,43 @@
 
 const xhttp = new XMLHttpRequest();
-//let questions = [];
 let playerAnswers = [];
-//let correctAnswers = [];
-//let questionCount = 0;
-let mainDiv = document.querySelector("#mainDiv");
 
 window.onload = loadSelectScreen;
 
-xhttp.onreadystatechange = function() {
-	console.log(xhttp.readyState);
-	if (xhttp.readyState === 4){
-		if (xhttp.status === 200){
-			console.log("200");
-			let questions = JSON.parse(this.responseText).results;
 
-
-			//let questions = JSON.parse(xhttp.responseText).results;
-			//parseAnswers(questions);
-			startGame(questions);
-			console.log(questions);
+function startGame(questions){
+	questions.correctAnswers = parseAnswers(questions);
+	questions.count = 0;
+	
+	questions.getQuestion = function(){
+		if(this.count < this.length){
+			let question = questions[this.count];
+			this.count++;
+			randomizeAlternatives(question);
+			return question;
 		}
-		if (xhttp.status === 404){
-			console.log("not found");
-		}
-	}
-};
+		return null;
+	};
 
-
-function request(url){
-	xhttp.open("get", url, true);
-	xhttp.send();
+	nextQuestion(questions);
 }
+
+
+function nextQuestion(questions){
+	if (questions.count < questions.length){
+		createQuestionScreen(questions);
+	}
+	else{
+		checkAnswer(questions);
+		displayResults();
+	}
+}
+
 
 function checkAnswer(questions){
 	let sum = 0;
-	for (let i=0; i<questions.correctAnswers.length; i++){
-		if(playerAnswers[i].localeCompare(questions.correctAnswers[i]) === 0){
+	for (let i=0; i<questions.length; i++){
+		if(playerAnswers[i].localeCompare(questions[i].correct_answer) === 0){
 			sum += 1;
 		}
 	}
@@ -49,47 +50,30 @@ function checkAnswer(questions){
 
 function displayResults(){
 
+
 }
 
-
-function startGame(questions){
-	//questions.playerAnswers = [];
-	questions.correctAnswers = parseAnswers(questions);
-	questions.count = 0;
-	questions.getQuestion = function() {
-		if(this.length > 0){
-			let question = questions.shift();
-			randomizeAlternatives(question);
-			return question;
+xhttp.onreadystatechange = function() {
+	console.log(xhttp.readyState);
+	if (xhttp.readyState === 4){
+		if (xhttp.status === 200){
+			console.log("200");
+			let questions = JSON.parse(this.responseText).results;
+			startGame(questions);
+			console.log(questions);
 		}
-		return null;
-	};
-	// playerAnswers = [];
-	// correctAnswers = [];
-	// questionCount = 0;
-	//parseAnswers(questions);
-	//loadQuestion(questions, questions.count);
-	nextQuestion(questions);
-}
-
-
-function nextQuestion(questions){
-	if (questions.length > 0){
-		questions.count += 1;
-		//randomizeAlternatives(currentQuestion);
-		createQuestionScreen(questions);
+		if (xhttp.status === 404){
+			console.log("not found");
+		}
 	}
-	else{
-		checkAnswer(questions);
-		displayResults();
-	}
-}
+};
 
 
 //-----------------LOAD SELECTSCREEN----------------------------------
 //--------------------------------------------------------------------
 
 function loadSelectScreen(){
+	let mainDiv = document.querySelector("#mainDiv");
 	mainDiv.innerHTML = "";
 	createDropDownSelect("Category", "category", categoryAlt);
 	createDropDownSelect("Difficulty", "difficulty", difficultyAlternatives);
@@ -99,6 +83,7 @@ function loadSelectScreen(){
 
 
 function createDropDownSelect(title, name, subjectList){
+	let mainDiv = document.querySelector("#mainDiv");
 	let div = document.createElement("div");
 	div.setAttribute("class", "selects");
 	
@@ -110,6 +95,7 @@ function createDropDownSelect(title, name, subjectList){
 
 	let currentItem;
 	let option;
+	
 	for (let i=0; i<subjectList.length; i++){
 		currentItem = subjectList[i];
 		option = document.createElement("option");
@@ -135,7 +121,6 @@ function createSubmitButton(htmlElement){
 	htmlElement.appendChild(button);
 
 	button.addEventListener("click", () => {
-
 		let category = document.querySelector("select[name='category']");
 		category = Number(category.options[category.selectedIndex].value);
 		
@@ -157,7 +142,6 @@ function createSubmitButton(htmlElement){
 //---------------------------------------------------------------------------
 
 function createQuestionScreen(questions){
-
 	let newQuestion = questions.getQuestion();
 
 	let mainDiv = document.querySelector("#mainDiv");
@@ -183,7 +167,8 @@ function createQuestionScreen(questions){
 
 	let button;
 	let text;
-	for (var i=0; i<newQuestion.randomizedAlternatives.length; i++){
+	let i;
+	for (i=0; i<newQuestion.randomizedAlternatives.length; i++){
 		text = newQuestion.randomizedAlternatives[i];
 		button = document.createElement("button");
 		button.setAttribute("class", "answerButton");
@@ -202,6 +187,7 @@ function createQuestionScreen(questions){
 	});
 
 	let answerButtons = document.getElementsByClassName("answerButton");
+
 	for (let i=0; i<answerButtons.length; i++){
 		
 		answerButtons[i].addEventListener("click", function(){
@@ -238,7 +224,13 @@ function randomizeAlternatives(question){
 }
 
 
-//---------------------API Info----------------------------------
+function request(url){
+	xhttp.open("get", url, true);
+	xhttp.send();
+}
+
+
+//---------------------API Info for Creating Menus---------------
 //---------------------------------------------------------------
 
 let difficultyAlternatives = ["Easy", "Medium", "Hard"];
