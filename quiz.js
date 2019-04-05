@@ -1,12 +1,13 @@
 
 const xhttp = new XMLHttpRequest();
 let playerAnswers = [];
+let mainDiv = document.querySelector("#mainDiv");
 
 window.onload = loadSelectScreen;
 
 
-function startGame(questions){
-	questions.correctAnswers = parseAnswers(questions);
+function prepGame(questions){
+	//questions.correctAnswers = parseAnswers(questions);
 	questions.count = 0;
 	
 	questions.getQuestion = function(){
@@ -18,14 +19,14 @@ function startGame(questions){
 		}
 		return null;
 	};
-
-	nextQuestion(questions);
+	loadQuestion(questions);
 }
 
 
-function nextQuestion(questions){
+function loadQuestion(questions){
 	if (questions.count < questions.length){
 		createQuestionScreen(questions);
+		createCancelButton(mainDiv);
 	}
 	else{
 		checkAnswer(questions);
@@ -59,7 +60,7 @@ xhttp.onreadystatechange = function() {
 		if (xhttp.status === 200){
 			console.log("200");
 			let questions = JSON.parse(this.responseText).results;
-			startGame(questions);
+			prepGame(questions);
 			console.log(questions);
 		}
 		if (xhttp.status === 404){
@@ -73,7 +74,7 @@ xhttp.onreadystatechange = function() {
 //--------------------------------------------------------------------
 
 function loadSelectScreen(){
-	let mainDiv = document.querySelector("#mainDiv");
+	//let mainDiv = document.querySelector("#mainDiv");
 	mainDiv.innerHTML = "";
 	createDropDownSelect("Category", "category", categoryAlt);
 	createDropDownSelect("Difficulty", "difficulty", difficultyAlternatives);
@@ -83,7 +84,7 @@ function loadSelectScreen(){
 
 
 function createDropDownSelect(title, name, subjectList){
-	let mainDiv = document.querySelector("#mainDiv");
+	//let mainDiv = document.querySelector("#mainDiv");
 	let div = document.createElement("div");
 	div.setAttribute("class", "selects");
 	
@@ -95,7 +96,7 @@ function createDropDownSelect(title, name, subjectList){
 
 	let currentItem;
 	let option;
-	
+
 	for (let i=0; i<subjectList.length; i++){
 		currentItem = subjectList[i];
 		option = document.createElement("option");
@@ -157,9 +158,9 @@ function createQuestionScreen(questions){
 	questionHeader.innerHTML = "Question nr " + questions.count + ":";
 	div.appendChild(questionHeader);
 
-	let questionP = document.createElement("p");
-	questionP.innerHTML = newQuestion.question;
-	div.appendChild(questionP);
+	let questionText = document.createElement("p");
+	questionText.innerHTML = newQuestion.question;
+	div.appendChild(questionText);
 	mainDiv.appendChild(div);
 
 	let alternatives = document.createElement("div");
@@ -176,15 +177,15 @@ function createQuestionScreen(questions){
 		button.innerHTML = text;
 		alternatives.appendChild(button);
 	}
-	
 	mainDiv.appendChild(alternatives);
-	let cancelButton = document.createElement("button");
-	cancelButton.innerHTML = "Cancel";
-	mainDiv.appendChild(cancelButton);
 	
-	cancelButton.addEventListener("click", function(){
-		loadSelectScreen();
-	});
+	// let cancelButton = document.createElement("button");
+	// cancelButton.innerHTML = "Cancel";
+	// mainDiv.appendChild(cancelButton);
+	
+	// cancelButton.addEventListener("click", function(){
+	// 	loadSelectScreen();
+	// });
 
 	let answerButtons = document.getElementsByClassName("answerButton");
 
@@ -193,7 +194,8 @@ function createQuestionScreen(questions){
 		answerButtons[i].addEventListener("click", function(){
 			console.log(this.value);
 			playerAnswers.push(this.value);
-			nextQuestion(questions);
+			//nextQuestion(questions);
+			loadQuestion(questions);
 		});
 	}
 }
@@ -201,6 +203,17 @@ function createQuestionScreen(questions){
 
 //------------------Helper Functions------------------------------
 //----------------------------------------------------------------
+
+function createCancelButton(parentElement){
+	let cancelButton = document.createElement("button");
+	cancelButton.innerHTML = "Cancel";
+	parentElement.appendChild(cancelButton);
+
+	cancelButton.addEventListener("click", function(){
+		loadSelectScreen();
+	});
+}
+
 
 function parseAnswers(questions){
 	let tempArray = [];
