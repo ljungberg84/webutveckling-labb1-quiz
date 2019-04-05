@@ -29,8 +29,8 @@ function loadQuestion(questions){
 		createCancelButton(mainDiv);
 	}
 	else{
-		checkAnswer(questions);
-		displayResults();
+		//checkAnswer(questions);
+		displayResult(questions);
 	}
 }
 
@@ -49,7 +49,102 @@ function checkAnswer(questions){
 }
 
 
-function displayResults(){
+function createRow(columns, isFirstRow, cssClass){
+	console.log("createRow");
+	console.log("columns.length: " + columns.length);
+	let row = document.createElement("tr");
+	let column;
+	for (let i=0; i<columns.length; i++){
+		if(isFirstRow === true){
+			column = document.createElement("th");
+			console.log("creating table header row");
+		}
+		else{
+			column = document.createElement("td");
+
+			console.log("creating column");
+		}
+		column.setAttribute("class", cssClass);
+		column.innerHTML = columns[i];
+		console.log(columns[i]);
+		row.appendChild(column);
+	}
+	return row;
+}
+
+function createTable(id){
+	let table = document.createElement("table");
+	table.setAttribute("id", id);
+
+	return table;
+}
+
+function createElement(type, id){
+	let element = document.createElement(type);
+	element.setAttribute("id", id);
+
+	return element;
+}
+
+function parseColumnData(question, index){
+	console.log("parseColumnData()");
+	console.log("index: " + index);
+	console.log("playerAnswer[index]: " + playerAnswers[index]);
+	let temp = [];
+	temp.push(question.question);
+	temp.push(question.correct_answer);
+	temp.push(playerAnswers[index]);
+
+	
+
+	console.log("temp in column data:" + temp);
+
+	return temp;
+}
+
+function compareAnswer(question, index){
+	if(question.correct_answer.localeCompare(playerAnswers[index]) === 0)
+		return 1;
+	else
+		return 0;
+}
+
+
+function displayResult(questions){
+	console.log("displayResult")
+	console.log("question length: " + questions.length);
+	mainDiv.innerHTML = "";
+	let tableDiv = createElement("div", "tableDiv");
+	let table = createElement("table","resultTable");
+	// let tableDiv = document.createElement("table");
+	// tableDiv.setAttribute("id", "tableDiv");
+	let result = [];
+	let columnData = [];
+	let question = {};
+
+	let headerRow = createRow(["Question", "Your Answer", "Correct Answer"], true, "tableHeader");
+	table.appendChild(headerRow);
+	for (let i=0; i<questions.length; i++){
+		//result.push(compareAnswer(question, i));
+		question = questions[i];
+		columnData = parseColumnData(question, i);
+		console.log("columnData: " + columnData);
+		row = createRow(columnData, false, "tableRow");
+		table.appendChild(row);
+
+		// temp.push(playerAnswers[i]);
+		// temp.push(question.correct_answer);
+		// temp.push(question.question);
+	}
+	tableDiv.appendChild(table);
+	mainDiv.appendChild(tableDiv);
+
+	//let tr = document.createElement("tr");
+	//let th
+
+
+
+
 
 
 }

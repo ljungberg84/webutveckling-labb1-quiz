@@ -30,7 +30,7 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 0px;
-	max-width: 700px;
+	max-width: 95%;
 	padding-top: 2px;
 	padding: 20px;
 	text-align: center;
@@ -43,7 +43,7 @@ body {
 	border-radius: 20px;
 	padding: 20px;
 	padding-top: 1px;
-	max-width: 720px;
+	max-width: 96%;
 	margin: auto;
 	margin-top: 20px;
 }
@@ -51,7 +51,7 @@ body {
 #div1 {
 	border-radius: 20px;
 	background-color: rgb(181, 194, 177);
-	max-width: 740px;
+	max-width: 900px;
 	padding: 20px;
 	padding-top: 2px;
 	margin: auto;
@@ -59,12 +59,12 @@ body {
 }
 
 #questionDiv {
-	//border: 5px solid rgb(55, 74, 50);
-	border-radius: 15px;*/
+	/*//border: 5px solid rgb(55, 74, 50);*/
+	border-radius: 15px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 20px;
-	max-width: 700px;
+	max-width: 80%;
 	padding: 5px;
 	text-align: center;
 	background-color: rgb(181, 194, 177);
@@ -117,4 +117,43 @@ hr {
 	border-bottom: 1px dotted black;
 	padding: 0;
 	max-width: 500px;
+}
+
+table {
+	/*border: 2px solid black;*/
+	border-radius: 5px;
+	background-color: rgb(181, 194, 177);
+	text-align: center;
+	padding: 5px;
+}
+
+tr {
+	border: 2px dotted black;
+}
+
+th{
+	/*border: 2px solid black;*/
+	border: 2px dotted black;
+
+	/*background-color: rgb(181, 194, 177);*/
+}
+
+td {
+		/*background-color: grey;*/
+		/*background-color: rgb(181, 194, 177);*/
+		/*border-radius: 10px;*/
+		padding-left: 5;
+		border: 2px dotted black;
+
+		margin: 0;
+
+}
+
+#table {
+	text-align: left;
+
+}
+
+#tableDiv{
+	margin: auto;
 }
