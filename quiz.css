@@ -1,6 +1,8 @@
 
 body {
 	font-family: "crimson Text";
+	margin:0;
+	padding:0;
 }
 
 #alternatives button {
@@ -30,7 +32,7 @@ body {
 	margin-bottom: 0px;
 	max-width: 95%;
 	padding-top: 2px;
-	padding: 20px;
+	padding: 10px;
 	text-align: center;
 	background-color: rgb(110, 147, 99);
 }
@@ -38,11 +40,13 @@ body {
 #bigDiv {
 	background-color: rgb(147, 168, 141);
 	border-radius: 20px;
-	padding: 20px;
+	padding: 10px;
 	padding-top: 1px;
-	max-width: 96%;
+	max-width: 100%;
+	width: 100%
+	height: 100%;
 	margin: auto;
-	margin-top: 20px;
+	margin-top: 10px;
 	text-align: center;
 }
 
@@ -50,7 +54,7 @@ body {
 	border-radius: 20px;
 	background-color: rgb(181, 194, 177);
 	max-width: 900px;
-	padding: 20px;
+	padding: 10px;
 	padding-top: 2px;
 	margin: auto;
 	/*margin-top: 50px;*/
@@ -149,17 +153,18 @@ table {
 	border-radius: 5px;
 	background-color: rgb(181, 194, 177);
 	text-align: left;
-	padding: 5px;
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
 	width: 100%;
+
 	/*position: absolute;*/
 }
 
 tr {
 	border: 2px dotted black;
 	text-align: left;
+	max-width: 95%
 }
 
 th{
@@ -168,6 +173,7 @@ th{
 	text-align: center;
 	width: 100%;
 	min-width: 90px;
+	max-width: 95%
 
 	/*background-color: rgb(181, 194, 177);*/
 }
@@ -176,6 +182,7 @@ td {
 
 	padding-left: 5;
 	border: 2px dotted black;
+	max-width: 95%;
 
 	margin: 0;
 
@@ -192,6 +199,8 @@ td {
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
+	width: 100%;
+	max-width: 100%;
 	/*position: relative;*/
 
 }
@@ -212,6 +221,7 @@ progress {
   margin-right: auto;
   margin-top: 5px;
   display: block;
+  max-width: 90%;
   /*margin: 50px;*/
 }
 progress::-webkit-progress-bar {
@@ -235,3 +245,13 @@ progress::-webkit-progress-value {
   /*display: block;*/
   /*font: caption;*/
 }*/
+
+@media only screen and (max-width: 650px){
+	#tableDiv{
+		display: none;
+	}
+	table{
+		display: none;
+	}
+
+}
