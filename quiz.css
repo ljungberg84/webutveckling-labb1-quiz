@@ -148,16 +148,23 @@ table {
 	text-align: left;
 	padding: 5px;
 	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+	/*position: absolute;*/
 }
 
 tr {
 	border: 2px dotted black;
-	text-align: center;
+	text-align: left;
 }
 
 th{
 	/*border: 2px solid black;*/
 	border: 2px dotted black;
+	text-align: center;
+	width: 100%;
+	min-width: 90px;
 
 	/*background-color: rgb(181, 194, 177);*/
 }
@@ -171,17 +178,19 @@ td {
 
 }
 
-#table {
+/*#table {
 	text-align: center;
 	margin-left: auto;
 	margin-right: auto;
 
-}
+}*/
 
 #tableDiv{
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
+	/*position: relative;*/
+
 }
 
 #resultP {
