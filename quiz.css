@@ -147,6 +147,7 @@ table {
 	background-color: rgb(181, 194, 177);
 	text-align: left;
 	padding: 5px;
+	display: block;
 }
 
 tr {
