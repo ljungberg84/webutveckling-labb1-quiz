@@ -13,7 +13,6 @@ body {
 
 #select {
 	text-align: center;
-	/*border: 20px solid rgb(55, 74, 50);*/
 	border-radius: 20px;
 	padding: 20px;
 	max-width: 200px;
@@ -24,8 +23,7 @@ body {
 }
 
 #mainDiv {
-	/*border: 5px solid rgb(55, 74, 50);*/
-	/*border-radius: 10px;*/
+
 	border-radius: 20px;
 	margin-left: auto;
 	margin-right: auto;
@@ -35,7 +33,6 @@ body {
 	padding: 20px;
 	text-align: center;
 	background-color: rgb(110, 147, 99);
-	/*background-color: rgb(243, 226, 133);*/
 }
 
 #bigDiv {
@@ -46,6 +43,7 @@ body {
 	max-width: 96%;
 	margin: auto;
 	margin-top: 20px;
+	text-align: center;
 }
 
 #div1 {
@@ -82,6 +80,21 @@ body {
 
 #questionHeader {
 	font-size: 35px;
+	/*border-radius: 10px;
+	border: 2px dotted black;*/
+	margin-left: 20%;
+	margin-right: 20%;
+	padding-bottom: 5px;
+	padding-top: 4px;
+}
+
+p {
+	font-size: 25px;
+	/*border: 2px dotted black;
+	border-radius: 10px;*/
+	padding: 15px;
+	margin-bottom: 3px;
+	margin-top: 0;
 }
 
 select {
@@ -89,6 +102,7 @@ select {
 	border-radius: 5px;
 	padding: 5px;
 	min-width: 80px;
+	width: 100px;
 	/*background-color: rgb(181, 194, 177);*/
 }
 
@@ -105,12 +119,20 @@ button {
 	background: white;
 	padding: 10px;
 	margin-bottom: 15px;
+	min-width: 80px;
 	/*background-color: rgb(181, 194, 177);*/
 }
 
-p {
-	font-size: 25px;
+#resultHeader {
+	background-color: rgb(181, 194, 177);
+	border-radius: 10px;
+	max-width: 200px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 15px;
+	padding: 4px;
 }
+
 
 hr {
 	border-top: 1px dotted black;
@@ -123,12 +145,13 @@ table {
 	/*border: 2px solid black;*/
 	border-radius: 5px;
 	background-color: rgb(181, 194, 177);
-	text-align: center;
+	text-align: left;
 	padding: 5px;
 }
 
 tr {
 	border: 2px dotted black;
+	text-align: center;
 }
 
 th{
@@ -139,21 +162,63 @@ th{
 }
 
 td {
-		/*background-color: grey;*/
-		/*background-color: rgb(181, 194, 177);*/
-		/*border-radius: 10px;*/
-		padding-left: 5;
-		border: 2px dotted black;
 
-		margin: 0;
+	padding-left: 5;
+	border: 2px dotted black;
+
+	margin: 0;
 
 }
 
 #table {
-	text-align: left;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
 
 }
 
 #tableDiv{
-	margin: auto;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
 }
+
+#resultP {
+	display: block;
+}
+
+
+progress {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  height: 40px;
+  width: 300px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  display: block;
+  /*margin: 50px;*/
+}
+progress::-webkit-progress-bar {
+  background: rgb(181, 194, 177);
+  /*box-shadow: inset 0px 0px 10px 5px #aaa;*/
+  border-radius: 10px;
+
+}
+progress::-webkit-progress-value {
+  /*background-image: repeating-linear-gradient(45deg, #FF94AA, #FF94AA 8px, #FF7799 8px, #FF7799 16px);*/
+  background-color: rgb(147, 168, 141);
+  /*border-radius: 10px;
+  border-radius-right: 0; */
+  border-top-left-radius: 10px; 
+  border-bottom-left-radius: 10px;
+}
+/*progress::before {
+  content: attr(value);
+  /*position: relative;*/
+  /*left: 70%;*/
+  /*display: block;*/
+  /*font: caption;*/
+}*/

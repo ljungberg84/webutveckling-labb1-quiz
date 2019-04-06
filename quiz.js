@@ -7,17 +7,13 @@ window.onload = loadSelectScreen;
 
 
 function prepGame(questions){
-	//questions.correctAnswers = parseAnswers(questions);
 	questions.count = 0;
-	
+	playerAnswers = [];
 	questions.getQuestion = function(){
-		if(this.count < this.length){
-			let question = questions[this.count];
-			this.count++;
-			randomizeAlternatives(question);
-			return question;
-		}
-		return null;
+		let question = questions[this.count];
+		this.count++;
+		randomizeAlternatives(question);
+		return question;
 	};
 	loadQuestion(questions);
 }
@@ -26,128 +22,13 @@ function prepGame(questions){
 function loadQuestion(questions){
 	if (questions.count < questions.length){
 		createQuestionScreen(questions);
-		createCancelButton(mainDiv);
+		createCancelButton(mainDiv, "Cancel");
 	}
 	else{
-		//checkAnswer(questions);
 		displayResult(questions);
 	}
 }
 
-
-function checkAnswer(questions){
-	let sum = 0;
-	for (let i=0; i<questions.length; i++){
-		if(playerAnswers[i].localeCompare(questions[i].correct_answer) === 0){
-			sum += 1;
-		}
-	}
-	console.log("correct answers: " + sum);
-	console.log("player: " + playerAnswers);
-	console.log("correct: " + questions.correctAnswers);
-	loadSelectScreen();
-}
-
-
-function createRow(columns, isFirstRow, cssClass){
-	console.log("createRow");
-	console.log("columns.length: " + columns.length);
-	let row = document.createElement("tr");
-	let column;
-	for (let i=0; i<columns.length; i++){
-		if(isFirstRow === true){
-			column = document.createElement("th");
-			console.log("creating table header row");
-		}
-		else{
-			column = document.createElement("td");
-
-			console.log("creating column");
-		}
-		column.setAttribute("class", cssClass);
-		column.innerHTML = columns[i];
-		console.log(columns[i]);
-		row.appendChild(column);
-	}
-	return row;
-}
-
-function createTable(id){
-	let table = document.createElement("table");
-	table.setAttribute("id", id);
-
-	return table;
-}
-
-function createElement(type, id){
-	let element = document.createElement(type);
-	element.setAttribute("id", id);
-
-	return element;
-}
-
-function parseColumnData(question, index){
-	console.log("parseColumnData()");
-	console.log("index: " + index);
-	console.log("playerAnswer[index]: " + playerAnswers[index]);
-	let temp = [];
-	temp.push(question.question);
-	temp.push(question.correct_answer);
-	temp.push(playerAnswers[index]);
-
-	
-
-	console.log("temp in column data:" + temp);
-
-	return temp;
-}
-
-function compareAnswer(question, index){
-	if(question.correct_answer.localeCompare(playerAnswers[index]) === 0)
-		return 1;
-	else
-		return 0;
-}
-
-
-function displayResult(questions){
-	console.log("displayResult")
-	console.log("question length: " + questions.length);
-	mainDiv.innerHTML = "";
-	let tableDiv = createElement("div", "tableDiv");
-	let table = createElement("table","resultTable");
-	// let tableDiv = document.createElement("table");
-	// tableDiv.setAttribute("id", "tableDiv");
-	let result = [];
-	let columnData = [];
-	let question = {};
-
-	let headerRow = createRow(["Question", "Your Answer", "Correct Answer"], true, "tableHeader");
-	table.appendChild(headerRow);
-	for (let i=0; i<questions.length; i++){
-		//result.push(compareAnswer(question, i));
-		question = questions[i];
-		columnData = parseColumnData(question, i);
-		console.log("columnData: " + columnData);
-		row = createRow(columnData, false, "tableRow");
-		table.appendChild(row);
-
-		// temp.push(playerAnswers[i]);
-		// temp.push(question.correct_answer);
-		// temp.push(question.question);
-	}
-	tableDiv.appendChild(table);
-	mainDiv.appendChild(tableDiv);
-
-	//let tr = document.createElement("tr");
-	//let th
-
-
-
-
-
-
-}
 
 xhttp.onreadystatechange = function() {
 	console.log(xhttp.readyState);
@@ -165,11 +46,53 @@ xhttp.onreadystatechange = function() {
 };
 
 
+//--------------------------Load Resultscreen---------------------------
+//----------------------------------------------------------------------
+function displayResult(questions){
+	mainDiv.innerHTML = "";
+	let tableDiv = createElement("div", "tableDiv");
+	let p = createElement("p", "resultHeader");
+	p.innerHTML = "Result"
+	tableDiv.appendChild(p);
+	let table = createElement("table","resultTable");
+	let result = [];
+	let columnData = [];
+	let question = {};
+
+	let headerRow = createRow(["Question", "Correct Answer", "Your Answer"], true, "tableHeader");
+	table.appendChild(headerRow);
+	for (let i=0; i<questions.length; i++){
+		question = questions[i];
+		columnData = parseColumnData(question, i);
+		row = createRow(columnData, false, "tableRow");
+		result.push(compareAnswer(question, i));
+		console.log("result: " + result );
+		table.appendChild(row);
+	}
+	tableDiv.appendChild(table);
+	mainDiv.appendChild(tableDiv);
+
+	//---------Progress Bar--------------------
+
+	//let progressBar = createElement("progress", "progressBar");
+	let sum = arraySum(result);
+	let resultP = createElement("p", "resultP");
+	resultP.innerHTML = "You answered " + sum + " out of " + questions.length + " correctly.";
+	mainDiv.appendChild(resultP);
+	let progressBar = createElement("progress", "progressBar");
+	progressBar.setAttribute("max", questions.length);
+	progressBar.setAttribute("value", sum);
+	console.log("result: " + arraySum(result));
+	mainDiv.appendChild(progressBar);
+	//-----------------------------------------
+	createCancelButton(mainDiv, "Back");
+}
+
+
 //-----------------LOAD SELECTSCREEN----------------------------------
 //--------------------------------------------------------------------
 
 function loadSelectScreen(){
-	//let mainDiv = document.querySelector("#mainDiv");
 	mainDiv.innerHTML = "";
 	createDropDownSelect("Category", "category", categoryAlt);
 	createDropDownSelect("Difficulty", "difficulty", difficultyAlternatives);
@@ -179,10 +102,8 @@ function loadSelectScreen(){
 
 
 function createDropDownSelect(title, name, subjectList){
-	//let mainDiv = document.querySelector("#mainDiv");
 	let div = document.createElement("div");
 	div.setAttribute("class", "selects");
-	
 	let label = document.createElement("label");
 	label.innerHTML = title;
 	div.appendChild(label);
@@ -273,14 +194,6 @@ function createQuestionScreen(questions){
 		alternatives.appendChild(button);
 	}
 	mainDiv.appendChild(alternatives);
-	
-	// let cancelButton = document.createElement("button");
-	// cancelButton.innerHTML = "Cancel";
-	// mainDiv.appendChild(cancelButton);
-	
-	// cancelButton.addEventListener("click", function(){
-	// 	loadSelectScreen();
-	// });
 
 	let answerButtons = document.getElementsByClassName("answerButton");
 
@@ -299,9 +212,70 @@ function createQuestionScreen(questions){
 //------------------Helper Functions------------------------------
 //----------------------------------------------------------------
 
-function createCancelButton(parentElement){
+
+function arraySum(array){
+	let sum = 0;
+	for(let i=0; i<array.length; i++){
+		sum += array[i];
+	}
+	return sum;
+}
+
+function createRow(columns, isFirstRow, cssClass){
+	let row = document.createElement("tr");
+	let column;
+	for (let i=0; i<columns.length; i++){
+		if(isFirstRow === true){
+			column = document.createElement("th");
+		}
+		else{
+			column = document.createElement("td");
+		}
+		column.setAttribute("class", cssClass);
+		column.innerHTML = columns[i];
+		row.appendChild(column);
+	}
+	return row;
+}
+
+
+function checkAnswer(questions){
+	let sum = 0;
+	for (let i=0; i<questions.length; i++){
+		if(playerAnswers[i].localeCompare(questions[i].correct_answer) === 0){
+			sum += 1;
+		}
+	}
+	console.log("correct answers: " + sum);
+	console.log("player: " + playerAnswers);
+	console.log("correct: " + questions.correctAnswers);
+	loadSelectScreen();
+}
+
+
+
+
+function compareAnswer(question, index){
+	if(question.correct_answer.localeCompare(playerAnswers[index]) === 0)
+		return 1;
+	else
+		return 0;
+}
+
+
+function parseColumnData(question, index){
+	let temp = [];
+	temp.push(question.question);
+	temp.push(question.correct_answer);
+	temp.push(playerAnswers[index]);
+
+	return temp;
+}
+
+
+function createCancelButton(parentElement, text){
 	let cancelButton = document.createElement("button");
-	cancelButton.innerHTML = "Cancel";
+	cancelButton.innerHTML = text;
 	parentElement.appendChild(cancelButton);
 
 	cancelButton.addEventListener("click", function(){
@@ -338,6 +312,21 @@ function request(url){
 }
 
 
+function createTable(id){
+	let table = document.createElement("table");
+	table.setAttribute("id", id);
+
+	return table;
+}
+
+function createElement(type, id){
+	let element = document.createElement(type);
+	element.setAttribute("id", id);
+
+	return element;
+}
+
+
 //---------------------API Info for Creating Menus---------------
 //---------------------------------------------------------------
 
@@ -345,5 +334,11 @@ let difficultyAlternatives = ["Easy", "Medium", "Hard"];
 let amountAlt = ["5", "10", "15"];
 let categoryAlt = [{"name": "Any", "value": 0}, 
 				   {"name": "Film", "value": 11},
-				   {"name": "Books", "value": 10}
+				   {"name": "Books", "value": 10},
+				   {"name": "Video Games", "value" : 15},
+				   {"name": "Art", "value": 25},
+				   {"name": "Sports", "value": 21},
+				   {"name": "Books", "value": 10},
+				   {"name": "Computers", "value": 18},
+				   {"name": "Math", "value": 19}
 			      ];
